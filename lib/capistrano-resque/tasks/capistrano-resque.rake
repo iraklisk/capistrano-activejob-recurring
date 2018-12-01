@@ -138,7 +138,7 @@ namespace :resque do
 
     desc "Stops resque scheduler"
     task :stop do
-      on roles :actibejob_scheduler do
+      on roles :activejob_scheduler do
         pid = "#{fetch(:resque_pid_path)}/scheduler.pid"
         if test "[ -e #{pid} ]"
           execute :kill, "-s #{fetch(:resque_kill_signal)} $(cat #{pid}); rm #{pid}"
