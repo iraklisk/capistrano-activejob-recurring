@@ -117,7 +117,7 @@ namespace :resque do
   namespace :scheduler do
     desc "See current scheduler status"
     task :status do
-      on roles :resque_scheduler do
+      on roles :activejob_scheduler do
         pid = "#{fetch(:resque_pid_path)}/scheduler.pid"
         if test "[ -e #{pid} ]"
           info capture(:ps, "-f -p $(cat #{pid}) | sed -n 2p")
@@ -127,18 +127,18 @@ namespace :resque do
 
     desc "Starts resque scheduler with default configs"
     task :start do
-      on roles :resque_scheduler do
+      on roles :activejob_scheduler do
         create_pid_path
         pid = "#{fetch(:resque_pid_path)}/scheduler.pid"
         within current_path do
-          execute :nohup, %{#{SSHKit.config.command_map[:rake]} RACK_ENV=#{rails_env} RAILS_ENV=#{rails_env} #{fetch(:resque_extra_env)} PIDFILE=#{pid} BACKGROUND=yes #{"VERBOSE=1 " if fetch(:resque_verbose)}MUTE=1 #{"DYNAMIC_SCHEDULE=yes " if fetch(:resque_dynamic_schedule)}#{"environment " if fetch(:resque_environment_task)}resque:scheduler #{output_redirection}}
+          execute :nohup, %{#{SSHKit.config.command_map[:rake]} RACK_ENV=#{rails_env} RAILS_ENV=#{rails_env} PIDFILE=#{pid} BACKGROUND=yes activejob:recurring:scheduler}
         end
       end
     end
 
     desc "Stops resque scheduler"
     task :stop do
-      on roles :resque_scheduler do
+      on roles :actibejob_scheduler do
         pid = "#{fetch(:resque_pid_path)}/scheduler.pid"
         if test "[ -e #{pid} ]"
           execute :kill, "-s #{fetch(:resque_kill_signal)} $(cat #{pid}); rm #{pid}"
