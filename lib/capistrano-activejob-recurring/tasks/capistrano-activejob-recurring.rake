@@ -1,8 +1,8 @@
 namespace :load do
   task :defaults do
     set :activejob_recurring_kill_signal, "KILL"
-    set :activejob_reccuring_log_file, '/dev/null'
-    set :activejob_reccuring_pid_path, -> { File.join(shared_path, 'tmp', 'pids') }
+    set :activejob_recurring_log_file, '/dev/null'
+    set :activejob_recurring_pid_path, -> { File.join(shared_path, 'tmp', 'pids') }
   end
 end
 
