@@ -26,10 +26,9 @@ module CapistranoResque
 
         def start_scheduler(pid)
           "cd #{current_path} && RACK_ENV=#{rails_env} RAILS_ENV=#{rails_env} \
-           PIDFILE=#{pid} BACKGROUND=yes \
-           MUTE=1 \
            nohup #{fetch(:bundle_cmd, "bundle")} exec rake \
-           activejob:recurring:scheduler #{output_redirection}"
+           activejob:recurring:scheduler #{output_redirection} \
+           & echo $! > #{pid}"
         end
 
         def stop_scheduler(pid)
