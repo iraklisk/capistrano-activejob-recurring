@@ -39,7 +39,7 @@ namespace :activejob_recurring do
       create_pid_path
       pid = "#{fetch(:activejob_recurring_pid_path)}/activejob_recurring_scheduler.pid"
       within current_path do
-        execute :nohup, %{#{SSHKit.config.command_map[:rake]} RACK_ENV=#{rails_env} RAILS_ENV=#{rails_env} PIDFILE=#{pid} BACKGROUND=yes MUTE=1 activejob:recurring:scheduler #{output_redirection}}
+        execute :nohup, %{#{SSHKit.config.command_map[:rake]} RACK_ENV=#{rails_env} RAILS_ENV=#{rails_env} activejob:recurring:scheduler #{output_redirection} & echo $! > #{pid}}
       end
     end
   end
